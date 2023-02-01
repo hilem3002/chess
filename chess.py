@@ -22,7 +22,7 @@ def character_placement(play_ground):
     
     # placed the other white characters
     for character_index in range(8):
-        play_ground[7][character_index] = other_characters_buyuk[character_index]
+        play_ground[7][character_index] = other_characters_big[character_index]
     
     # placed the p as black powns
     for small_pown in range(8):
@@ -45,7 +45,7 @@ def play_ground_printing(play_ground):
         for column_index in range(8):
             if column_index == 0:
                 print(f"{8 - line_index}", end="")
-            if sutun_index == 7:
+            if column_index == 7:
                 print(f" |", play_ground[line_index][column_index], f"| {8 - line_index}")
             else:
                 print(" |", play_ground[line_index][column_index], end="")
