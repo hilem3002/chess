@@ -1,83 +1,95 @@
-def oyun_alani_olusturma():
-    oyun_alani = []
+# function for empty playground creating as a 2D list
+def play_ground_creating():
+    play_ground = []
+    
+    # used nested loops to create a 2D list
+    for line in range(8):
+        line_list = []
+        play_ground.append(line_list)
+        for column in range(8):
+            line_list.append(" ")
 
-    for satir in range(8):
-        satir_liste = []
-        oyun_alani.append(satir_liste)
-        for sutun in range(8):
-            satir_liste.append(" ")
+    return play_ground
 
-    return oyun_alani
+# function for character placement to empty playground
+def character_placement(play_ground):
+    # placed the P as white powns
+    for big_pown in range(8):
+        play_ground[6][big_pown] = "P"
+        
+    # these are other white characters; K:castle, A:knight, F:bishop, V:queen, Ş:king
+    other_characters_big = ["K", "A", "F", "V", "Ş", "F", "A", "K"]
+    
+    # placed the other white characters
+    for character_index in range(8):
+        play_ground[7][character_index] = other_characters_buyuk[character_index]
+    
+    # placed the p as black powns
+    for small_pown in range(8):
+        play_ground[1][small_pown] = "p"
+    
+    # these are other black characters; k:castle, a:knight, f:bishop, v:queen, ş:king
+    other_characters_small = ["k", "a", "f", "v", "ş", "f", "a", "k"]
+    
+    # placed the other black characters
+    for character_index_2 in range(8):
+        play_ground[0][character_index_2] = other_characters_small[character_index_2]
 
-
-def karakter_yerlestirme(oyun_alani):
-    for buyuk_piyon in range(8):
-        oyun_alani[6][buyuk_piyon] = "P"
-
-    diger_karakterler_buyuk = ["K", "A", "F", "V", "Ş", "F", "A", "K"]
-
-    for karakter_index in range(8):
-        oyun_alani[7][karakter_index] = diger_karakterler_buyuk[karakter_index]
-
-    for kucuk_piyon in range(8):
-        oyun_alani[1][kucuk_piyon] = "p"
-
-    diger_karakterler_kucuk = ["k", "a", "f", "v", "ş", "f", "a", "k"]
-
-    for karakter_index_2 in range(8):
-        oyun_alani[0][karakter_index_2] = diger_karakterler_kucuk[karakter_index_2]
-
-
-def oyun_alani_yazdirma(oyun_alani):
+# function for printing the playground that is actually seems like a chess playground
+def play_ground_printing(play_ground):
     print("    A", "  B", "  C", "  D", "  E", "  F", "  G", "  H")
 
-    for satir_index in range(8):
+    for line_index in range(8):
         print("  ---------------------------------")
 
-        for sutun_index in range(8):
-            if sutun_index == 0:
-                print(f"{8 - satir_index}", end="")
+        for column_index in range(8):
+            if column_index == 0:
+                print(f"{8 - line_index}", end="")
             if sutun_index == 7:
-                print(f" |", oyun_alani[satir_index][sutun_index], f"| {8 - satir_index}")
+                print(f" |", play_ground[line_index][column_index], f"| {8 - line_index}")
             else:
-                print(" |", oyun_alani[satir_index][sutun_index], end="")
+                print(" |", play_ground[line_index][column_index], end="")
 
     print("  ---------------------------------")
     print("    A", "  B", "  C", "  D", "  E", "  F", "  G", "  H")
 
+# function for getting the direction of motion
+def taking_direction_of_motion():
+    current_location = input("current location: ")
+    target_location = input("target location: ")
 
-def hareket_dogrultusu_alma():
-    mevcut_konum = input("mevcut konumu giriniz: ")
-    gidilecek_konum = input("gidilecek konumu giriniz: ")
+    return current_location, target_location
 
-    return mevcut_konum, gidilecek_konum
+# function for motion and eating algorithm
+def motion_eating_algorithm(play_ground, current_location, target_location, location_dict):
+    # understand the current location as indexes
+    current_line_index = 8 - int(current_location[0])
+    current_column_index = location_dict[current_location[1]]
+    
+    # understand the target location as indexes
+    target_line_index = 8 - int(target_location[0])
+    target_column_index = location_dict[target_location[1]]
+    
+    # control if there is a character that you want to go and eat
+    if play_ground[target_line_index][target_column_index] != " ":
+        play_ground[target_line_index][target_column_index] = " "
 
-
-def hareket_yeme_algoritmasi(oyun_alani, mevcut_konum, gidilecek_konum, konum_sozlugu):
-    mevcut_satir_index = 8 - int(mevcut_konum[0])
-    mevcut_sutun_index = konum_sozlugu[mevcut_konum[1]]
-
-    gidilecek_satir_index = 8 - int(gidilecek_konum[0])
-    gidilecek_sutun_index = konum_sozlugu[gidilecek_konum[1]]
-
-    if oyun_alani[gidilecek_satir_index][gidilecek_sutun_index] != " ":
-        oyun_alani[gidilecek_satir_index][gidilecek_sutun_index] = " "
-
-    oynanan_tas = oyun_alani[mevcut_satir_index][mevcut_sutun_index]
-    oyun_alani[mevcut_satir_index][mevcut_sutun_index] = " "
-    oyun_alani[gidilecek_satir_index][gidilecek_sutun_index] = oynanan_tas
+    character = play_ground[current_line_index][current_column_index]
+    play_ground[current_line_index][current_column_index] = " "
+    play_ground[target_line_index][target_column_index] = character
 
 
 def main():
-    konum_sozlugu = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5, "G": 6, "H": 7}
-    a = oyun_alani_olusturma()
-    karakter_yerlestirme(a)
+    # dictionary for letters as indexes
+    location_dict = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5, "G": 6, "H": 7}
+    a = play_ground_creating()
+    character_placement(a)
     c = True
     while c == True:
-        oyun_alani_yazdirma(a)
+        play_ground_printing(a)
         print()
-        b = list(hareket_dogrultusu_alma())
-        hareket_yeme_algoritmasi(a, b[0], b[1], konum_sozlugu)
+        b = list(taking_direction_of_motion())
+        motion_eating_algorithm(a, b[0], b[1], location_dict)
 
 
 main()
